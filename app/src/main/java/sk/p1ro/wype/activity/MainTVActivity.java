@@ -40,7 +40,10 @@ public class MainTVActivity extends Activity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Common.updateList(this, adapter);
+        int size = Common.updateList(this, adapter);
+        if (size == 0){
+            button.requestFocus();
+        }
     }
 
     @Override

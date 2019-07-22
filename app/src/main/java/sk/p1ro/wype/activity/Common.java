@@ -34,18 +34,24 @@ public class Common {
     private static String editedFolder = null;
 
 
-    static void updateList(Context context, FlexibleAdapter<FolderModel> adapter) {
+    static Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter) {
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
         adapter.clear();
+        int size = 0;
+
         if (folders != null && !folders.isEmpty()) {
             String[] folderPaths = folders.split(";");
+
+            size = folderPaths.length;
 
             for (String path : folderPaths) {
                 adapter.addItem(new FolderModel(path));
             }
             adapter.notifyDataSetChanged();
         }
+
+        return size;
     }
 
     static Boolean handleContextMenuClick(Activity context, FlexibleAdapter<FolderModel> adapter, int id, FolderModel model) {
