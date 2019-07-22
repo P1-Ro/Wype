@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true"> <!-- pressed -->
+        <shape android:shape="oval">
+            <solid android:color="@color/search_opaque" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true"> <!-- focused -->
+        <shape android:shape="oval">
+            <solid android:color="@color/color_fab_focus" />
+        </shape>
+    </item>
+
+    <item android:state_hovered="true"> <!-- hovered -->
+        <shape android:shape="oval">
+            <solid android:color="@color/color_fab_focus" />
+        </shape>
+    </item>
+
+    <item> <!-- default -->
+        <shape android:shape="oval">
+            <solid android:color="@color/selected_background" />
+        </shape>
+    </item>
+
+</selector>

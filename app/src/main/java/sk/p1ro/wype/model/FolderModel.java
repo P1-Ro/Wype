@@ -3,9 +3,12 @@ package sk.p1ro.wype.model;
 import android.os.Build;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
 
 import java.util.List;
 
@@ -18,9 +21,16 @@ import sk.p1ro.wype.R;
 public class FolderModel extends AbstractFlexibleItem<FolderModel.MyViewHolder> {
 
     private String path;
+    private int resID;
 
     public FolderModel(String path) {
         this.path = path;
+        resID = R.layout.folder_view;
+    }
+
+    public FolderModel(String path, boolean isTV) {
+        this.path = path;
+        this.resID = isTV ? R.layout.folder_view_tv : R.layout.folder_view;
     }
 
     @Override
@@ -34,7 +44,7 @@ public class FolderModel extends AbstractFlexibleItem<FolderModel.MyViewHolder> 
 
     @Override
     public int getLayoutRes() {
-        return R.layout.folder_view;
+        return this.resID;
     }
 
     @Override
@@ -67,7 +77,7 @@ public class FolderModel extends AbstractFlexibleItem<FolderModel.MyViewHolder> 
     class MyViewHolder extends FlexibleViewHolder {
 
         TextView textView;
-        ImageButton menu;
+        Button menu;
 
         MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);

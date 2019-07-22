@@ -2,8 +2,12 @@ package sk.p1ro.wype.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,10 +31,10 @@ public class MainTVActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.content_main_tv);
 
 
-        FloatingActionButton button = findViewById(R.id.fab);
+        Button button = findViewById(R.id.fab);
         button.setOnClickListener(view -> openFileChooser(this));
 
         List<FolderModel> folderModelList = new ArrayList<>();
@@ -40,7 +44,7 @@ public class MainTVActivity extends Activity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        int size = Common.updateList(this, adapter);
+        int size = Common.updateList(this, adapter, true);
         if (size == 0){
             button.requestFocus();
         }

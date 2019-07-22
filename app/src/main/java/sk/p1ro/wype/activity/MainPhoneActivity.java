@@ -41,7 +41,7 @@ public class MainPhoneActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        int size = Common.updateList(this, adapter);
+        int size = Common.updateList(this, adapter, false);
         if (size == 0){
             button.requestFocus();
         }

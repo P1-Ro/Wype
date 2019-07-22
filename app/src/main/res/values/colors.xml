@@ -5,4 +5,5 @@
     <color name="search_opaque">#A56A21</color>
     <color name="selected_background">#ffaa3f</color>
     <color name="default_background">#3d3d3d</color>
+    <color name="color_fab_focus">#FFD097</color>
 </resources>

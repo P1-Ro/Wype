@@ -33,8 +33,7 @@ public class Common {
     private static final String FOLDERS = "folders";
     private static String editedFolder = null;
 
-
-    static Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter) {
+    static Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter, boolean isTV) {
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
         adapter.clear();
@@ -46,7 +45,7 @@ public class Common {
             size = folderPaths.length;
 
             for (String path : folderPaths) {
-                adapter.addItem(new FolderModel(path));
+                adapter.addItem(new FolderModel(path, isTV));
             }
             adapter.notifyDataSetChanged();
         }
@@ -92,7 +91,7 @@ public class Common {
 
             saveFolderList(sp, foldersList);
 
-            Common.updateList(context, adapter);
+            Common.updateList(context, adapter, context instanceof MainTVActivity);
             scheduleWorker(context);
         }
     }
@@ -143,7 +142,7 @@ public class Common {
             }
 
             saveFolderList(sp, newFoldersList);
-            updateList(context, adapter);
+            updateList(context, adapter, context instanceof MainTVActivity);
         }
     }
 
