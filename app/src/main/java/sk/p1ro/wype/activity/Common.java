@@ -30,7 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class Common {
 
     private static int FILE_CODE = 9999;
-    private static final String FOLDERS = "folders";
+    public static final String FOLDERS = "folders";
     private static String editedFolder = null;
 
     static Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter, boolean isTV) {
@@ -154,7 +154,7 @@ public class Common {
 
         if (folders != null && !folders.isEmpty()) {
             Data data = new Data.Builder()
-                    .putString("folders", folders)
+                    .putString(FOLDERS, folders)
                     .build();
 
             PeriodicWorkRequest workRequest = new PeriodicWorkRequest
