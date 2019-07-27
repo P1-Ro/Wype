@@ -77,7 +77,7 @@ public class FolderModel extends AbstractFlexibleItem<FolderModel.MyViewHolder> 
     class MyViewHolder extends FlexibleViewHolder {
 
         TextView textView;
-        Button menu;
+        View menu;
 
         MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
