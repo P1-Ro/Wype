@@ -11,7 +11,7 @@ import androidx.work.WorkerParameters;
 import java.io.File;
 import java.util.Arrays;
 
-import sk.p1ro.wype.activity.Common;
+import static sk.p1ro.wype.model.Constants.FOLDERS;
 
 public class RemoveFolderWorker extends Worker {
 
@@ -24,7 +24,7 @@ public class RemoveFolderWorker extends Worker {
     public Result doWork() {
 
         Data data = getInputData();
-        String foldersString = data.getString(Common.FOLDERS);
+        String foldersString = data.getString(FOLDERS);
         if (foldersString != null) {
             String[] folders = foldersString.split(";");
             boolean result = true;

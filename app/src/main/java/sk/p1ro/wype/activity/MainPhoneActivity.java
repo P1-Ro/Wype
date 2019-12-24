@@ -17,10 +17,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import sk.p1ro.wype.R;
 import sk.p1ro.wype.model.FolderModel;
 
-import static sk.p1ro.wype.activity.Common.handleContextMenuClick;
-import static sk.p1ro.wype.activity.Common.openFileChooser;
-
-public class MainPhoneActivity extends AppCompatActivity {
+public class MainPhoneActivity extends AppCompatActivity implements CommonFunctionality {
 
     private FlexibleAdapter<FolderModel> adapter;
 
@@ -41,7 +38,7 @@ public class MainPhoneActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        int size = Common.updateList(this, adapter, false);
+        int size = updateList(this, adapter, false);
         if (size == 0){
             button.requestFocus();
         }
@@ -59,7 +56,7 @@ public class MainPhoneActivity extends AppCompatActivity {
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Common.onActivityResult(this, adapter, requestCode, resultCode, intent);
+        onActivityResult(this, adapter, requestCode, resultCode, intent);
     }
 
 }

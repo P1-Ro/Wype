@@ -20,20 +20,21 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import sk.p1ro.wype.model.FolderModel;
 import sk.p1ro.wype.worker.RemoveFolderWorker;
 
 import static android.content.Context.MODE_PRIVATE;
+import static sk.p1ro.wype.model.Constants.FILE_CODE;
+import static sk.p1ro.wype.model.Constants.FOLDERS;
 
-public class Common {
+interface CommonFunctionality {
 
-    private static int FILE_CODE = 9999;
-    public static final String FOLDERS = "folders";
-    private static String editedFolder = null;
+    AtomicReference<String> editedFolder = new AtomicReference<>();
 
-    static Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter, boolean isTV) {
+    default Integer updateList(Context context, FlexibleAdapter<FolderModel> adapter, boolean isTV) {
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
         adapter.clear();
@@ -53,11 +54,11 @@ public class Common {
         return size;
     }
 
-    static Boolean handleContextMenuClick(Activity context, FlexibleAdapter<FolderModel> adapter, int id, FolderModel model) {
+    default Boolean handleContextMenuClick(Activity context, FlexibleAdapter<FolderModel> adapter, int id, FolderModel model) {
         if (model != null) {
             switch (id) {
                 case 1: //edit
-                    editedFolder = model.gePath();
+                    editedFolder.set(model.gePath());
                     openFileChooser(context, model.gePath());
                     break;
                 case 2: // delete
@@ -70,16 +71,16 @@ public class Common {
         return null;
     }
 
-    static void onActivityResult(Context context, FlexibleAdapter<FolderModel> adapter, int requestCode, int resultCode, Intent intent) {
+    default void onActivityResult(Context context, FlexibleAdapter<FolderModel> adapter, int requestCode, int resultCode, Intent intent) {
         if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
 
             List<Uri> files = Utils.getSelectedFilesFromResult(intent);
             File dir = Utils.getFileForUri(files.get(0));
             String folder = dir.getAbsolutePath();
 
-            if (editedFolder != null) {
-                deleteFolderFromList(context, adapter, editedFolder);
-                editedFolder = null;
+            if (editedFolder.get() != null) {
+                deleteFolderFromList(context, adapter, editedFolder.get());
+                editedFolder.set(null);
             }
 
             SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
@@ -91,12 +92,12 @@ public class Common {
 
             saveFolderList(sp, foldersList);
 
-            Common.updateList(context, adapter, context instanceof MainTVActivity);
+            updateList(context, adapter, context instanceof MainTVActivity);
             scheduleWorker(context);
         }
     }
 
-    static void saveFolderList(SharedPreferences sp, LinkedHashSet<String> foldersList) {
+    default void saveFolderList(SharedPreferences sp, LinkedHashSet<String> foldersList) {
         StringBuilder csvBuilder = new StringBuilder();
 
         for (String str : foldersList) {
@@ -110,11 +111,11 @@ public class Common {
         sp.edit().putString(FOLDERS, csv).apply();
     }
 
-    static void openFileChooser(Activity context) {
+    default void openFileChooser(Activity context) {
         openFileChooser(context, null);
     }
 
-    static void openFileChooser(Activity context, String path) {
+    default void openFileChooser(Activity context, String path) {
         Intent i = new Intent(context, FilePickerActivity.class);
 
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
@@ -128,7 +129,7 @@ public class Common {
         context.startActivityForResult(i, FILE_CODE);
     }
 
-    static void deleteFolderFromList(Context context, FlexibleAdapter<FolderModel> adapter, String path) {
+    default void deleteFolderFromList(Context context, FlexibleAdapter<FolderModel> adapter, String path) {
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
         if (folders != null) {
@@ -146,7 +147,7 @@ public class Common {
         }
     }
 
-    static void scheduleWorker(Context context) {
+    default void scheduleWorker(Context context) {
         WorkManager mWorkManager = WorkManager.getInstance();
 
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
