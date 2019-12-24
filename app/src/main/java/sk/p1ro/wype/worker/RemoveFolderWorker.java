@@ -33,10 +33,12 @@ public class RemoveFolderWorker extends Worker {
                 File dir = new File(folder);
                 File[] files = dir.listFiles();
 
-                Log.d("worker", Arrays.toString(files));
+                if (files == null){
+                    result = false;
+                } else {
+                    Log.d("worker", Arrays.toString(files));
 
-                for (File file : files) {
-                    if (file.isFile()) {
+                    for (File file : files) {
                         result &= file.delete();
                     }
                 }
@@ -44,10 +46,11 @@ public class RemoveFolderWorker extends Worker {
 
             if (result) {
                 return Result.success();
+            } else {
+                return Result.retry();
             }
         }
 
-
-        return Result.retry();
+        return Result.success();
     }
 }

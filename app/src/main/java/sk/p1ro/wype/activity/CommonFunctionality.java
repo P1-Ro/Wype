@@ -41,7 +41,7 @@ interface CommonFunctionality {
         adapter.clear();
         int size = 0;
 
-        if (folders != null && !folders.isEmpty()) {
+        if (!folders.isEmpty()) {
             String[] folderPaths = folders.split(";");
 
             size = folderPaths.length;
@@ -133,28 +133,31 @@ interface CommonFunctionality {
     default void deleteFolderFromList(Context context, FlexibleAdapter<FolderModel> adapter, String path) {
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
-        if (folders != null) {
-            String[] foldersList = folders.split(";");
-            LinkedHashSet<String> newFoldersList = new LinkedHashSet<>();
+        String[] foldersList = folders.split(";");
+        LinkedHashSet<String> newFoldersList = new LinkedHashSet<>();
 
-            for (String folder : foldersList) {
-                if (!folder.equals(path)) {
-                    newFoldersList.add(folder);
-                }
+        for (String folder : foldersList) {
+            if (!folder.equals(path)) {
+                newFoldersList.add(folder);
             }
-
-            saveFolderList(sp, newFoldersList);
-            updateList(context, adapter, context instanceof MainTVActivity);
         }
+
+        saveFolderList(sp, newFoldersList);
+        updateList(context, adapter, context instanceof MainTVActivity);
+        scheduleWorker(context, true);
     }
 
-    default void scheduleWorker(Context context) {
+    default void scheduleWorker(Context context){
+        scheduleWorker(context, false);
+    }
+
+    default void scheduleWorker(Context context, boolean force) {
         WorkManager mWorkManager = WorkManager.getInstance(context);
 
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
 
-        if (folders != null && !folders.isEmpty()) {
+        if (force || !folders.isEmpty()) {
             Data data = new Data.Builder()
                     .putString(FOLDERS, folders)
                     .build();
@@ -164,6 +167,7 @@ interface CommonFunctionality {
                     1,
                     TimeUnit.DAYS)
                     .setInputData(data)
+                    .addTag(Constants.WORKER_ID)
                     .build();
 
             mWorkManager.enqueueUniquePeriodicWork(Constants.WORKER_ID, ExistingPeriodicWorkPolicy.REPLACE, workRequest);
