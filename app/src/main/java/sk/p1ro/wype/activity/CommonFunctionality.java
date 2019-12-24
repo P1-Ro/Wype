@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import sk.p1ro.wype.model.Constants;
 import sk.p1ro.wype.model.FolderModel;
 import sk.p1ro.wype.worker.RemoveFolderWorker;
 
@@ -148,7 +149,7 @@ interface CommonFunctionality {
     }
 
     default void scheduleWorker(Context context) {
-        WorkManager mWorkManager = WorkManager.getInstance();
+        WorkManager mWorkManager = WorkManager.getInstance(context);
 
         SharedPreferences sp = context.getSharedPreferences(FOLDERS, MODE_PRIVATE);
         String folders = sp.getString(FOLDERS, "");
@@ -165,7 +166,7 @@ interface CommonFunctionality {
                     .setInputData(data)
                     .build();
 
-            mWorkManager.enqueueUniquePeriodicWork("delete", ExistingPeriodicWorkPolicy.REPLACE, workRequest);
+            mWorkManager.enqueueUniquePeriodicWork(Constants.WORKER_ID, ExistingPeriodicWorkPolicy.REPLACE, workRequest);
         }
     }
 }
