@@ -1,10 +1,15 @@
+sudo: required
 language: android
-dist: trusty
+dist: precise
 
+jdk:
+  - oraclejdk8
+
+# Emulator Management: Create, Start and Wait
 before_script:
-  - sudo apt install file
-  - echo no | android create avd --force -n test -t android-29 --abi x86 -c 100M
-  - emulator -avd test -no-audio -no-window &
+  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}'
+  - echo no | android create avd --force -n test -t $API --abi $ABI
+  - emulator -avd test -no-audio -no-window
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
@@ -12,6 +17,7 @@ android:
   components:
     - tools
     - platform-tools
+    - extra-android-m2repository
 
     # The BuildTools version used by your project
     - build-tools-29.0.0
@@ -19,8 +25,12 @@ android:
     # The SDK version used to compile your project
     - android-29
 
-    # System images
-    - sys-img-x86-android-29
+env:
+  matrix:
+    - API=android-21 ABI=armeabi-v7a
+    - API=android-22 ABI=armeabi-v7a
+    - API=android-24 ABI=armeabi-v7a
+    - API=android-25 ABI=arm64-v8a
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -31,3 +41,4 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+    - $ANDROID_HOME/.android/avd
