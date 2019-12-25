@@ -11,7 +11,8 @@ android:
     - android-29
 
 before_install:
-  - yes | sdkmanager "platforms;android-28;android-29"
+  - yes | sdkmanager "platforms;android-28"
+  - yes | sdkmanager "platforms;android-29"
 
 script:
   - ./gradlew assemble assembleAndroidTest -PdisablePreDex
