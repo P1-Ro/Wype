@@ -5,14 +5,6 @@ dist: precise
 jdk:
   - oraclejdk8
 
-# Emulator Management: Create, Start and Wait
-before_script:
-  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}'
-  - echo no | android create avd --force -n test -t $API --abi $ABI
-  - emulator -avd test -no-audio -no-window
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
 android:
   components:
     - tools
@@ -25,12 +17,9 @@ android:
     # The SDK version used to compile your project
     - android-29
 
-env:
-  matrix:
-    - API=android-21 ABI=armeabi-v7a
-    - API=android-22 ABI=armeabi-v7a
-    - API=android-24 ABI=armeabi-v7a
-    - API=android-25 ABI=arm64-v8a
+script:
+  - ./gradlew assemble assembleAndroidTest -PdisablePreDex
+  - bash -x instumented_firebase_tests.sh
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
