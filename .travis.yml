@@ -2,19 +2,18 @@ sudo: required
 language: android
 dist: trusty
 
+jdk:
+  - oraclejdk8
+
 android:
   components:
-    - tools
-    - build-tools
-    - platform-tools
+    - build-tools-29.0.2
+    - android-29
 
-env:
-  global:
-    - ANDROID_API=29
-    - ANDROID_BUILD_TOOLS=29.0.2
+before_install:
+  - yes | sdkmanager "platforms;android-29"
 
 script:
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
   - ./gradlew assemble assembleAndroidTest -PdisablePreDex
   - bash -x instumented_firebase_tests.sh
 
