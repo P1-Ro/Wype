@@ -75,12 +75,7 @@ public class TestMobile {
                 .check(matches(isDisplayed()))
                 .check(matches(ViewMatchers.hasChildCount(0)));
 
-        boolean isEmulator = Build.HARDWARE.contains("goldfish");
-        if (isEmulator){
-            assertWorkersCount(0);
-        } else {
-            assertWorkersCount(1);
-        }
+        assertWorkersCount(0);
     }
 
     @Test
@@ -144,10 +139,10 @@ public class TestMobile {
                         .build();
 
         ListenableWorker.Result result = worker.doWork();
-        assertThat(result, is(ListenableWorker.Result.success()));
+        assertThat("Worker has finished with success", result, is(ListenableWorker.Result.success()));
 
         for (String folder : Objects.requireNonNull(folders).split(";")){
-            assertThat(new File(folder).listFiles().length, is(0) );
+            assertThat("Count of deleted files", new File(folder).listFiles().length, is(0) );
         }
     }
 
@@ -181,6 +176,6 @@ public class TestMobile {
         }  catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        assertThat(workers, is(count));
+        assertThat("Worker count should be 0", workers, is(count));
     }
 }
