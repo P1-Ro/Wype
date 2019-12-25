@@ -17,6 +17,11 @@ android:
     # The SDK version used to compile your project
     - android-29
 
+env:
+  global:
+    - ANDROID_API=29
+    - ANDROID_BUILD_TOOLS=29.0.0
+
 script:
   - ./gradlew assemble assembleAndroidTest -PdisablePreDex
   - bash -x instumented_firebase_tests.sh
