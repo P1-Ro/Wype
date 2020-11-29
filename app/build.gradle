@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation "androidx.work:work-runtime:$work_version"
-    implementation 'com.nononsenseapps:filepicker:4.1.0'
+    implementation 'com.nononsenseapps:filepicker:4.2.1'
 
 
     // Using JCenter
